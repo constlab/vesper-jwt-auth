@@ -1,16 +1,25 @@
 {
   "name": "vesper-jwt-auth",
   "version": "0.0.1",
-  "description": "",
+  "description": "vesper + jwt auth",
   "main": "index.js",
   "scripts": {
     "doc": "typedoc --out docs/src/ --readme ./README.md",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
     "sample": "NODE_ENV=dev ts-node-dev sample/index.ts"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "vesper",
+    "jwt",
+    "node",
+    "typescript"
+  ],
+  "author": "Ivan Kalinichenko <kalinichenko@constlab.ru>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/constlab/vesper-jwt-auth/issues"
+  },
+  "homepage": "https://github.com/constlab/vesper-jwt-auth",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "class-validator": "^0.9.1",
