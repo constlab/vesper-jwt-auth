@@ -5,7 +5,7 @@ import { AuthModule } from "..";
 import { IUser } from "../base/IUser";
 import { IJWTPayload } from "../base/IJWTPayload";
 
-interface IAuthResult {
+export interface IAuthResult {
 	accessToken: string;
 	refreshToken: string;
 	user: IUser;

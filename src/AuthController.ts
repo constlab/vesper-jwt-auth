@@ -1,6 +1,6 @@
 import { Controller, CurrentRequest, Mutation, ArgsValidator } from "vesper";
 import { Inject } from "typedi";
-import { AuthService } from "./service/AuthService";
+import { AuthService, IAuthResult } from "./service/AuthService";
 import { Request } from "express";
 
 @Controller()
@@ -15,7 +15,12 @@ export class AuthController {
 
 	@Mutation({ name: "authLogin" })
 	//@ArgsValidator(LoginArgsValidator)
-	async login(args: any): Promise<any> {
-		return this.auth.sign(args.email, args.password, this.userAgent);
+	async login({ email, password }: { email: string; password: string }): Promise<IAuthResult> {
+		return this.auth.sign(email, password, this.userAgent);
+	}
+
+	@Mutation({ name: "authRefresh" })
+	async refresh({ token }: { token: string }): Promise<IAuthResult> {
+		return await this.auth.refresh(this.userAgent, token);
 	}
 }
