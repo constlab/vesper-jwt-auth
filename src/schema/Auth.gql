@@ -1,0 +1,4 @@
+type Mutation {
+	authLogin(email: String!, password: String!): AuthResult
+	authRefresh(token: String!): AuthResult
+}

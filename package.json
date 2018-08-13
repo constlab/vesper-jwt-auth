@@ -1,0 +1,30 @@
+{
+  "name": "vesper-jwt-auth",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "doc": "typedoc --out docs/src/ --readme ./README.md",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
+    "sample": "NODE_ENV=dev ts-node-dev sample/index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "class-validator": "^0.9.1",
+    "jsonwebtoken": "^8.3.0"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.1",
+    "@types/jsonwebtoken": "^7.2.8",
+    "@types/node": "^10.5.8",
+    "conventional-changelog-cli": "^2.0.1",
+    "sqlite3": "^4.0.2",
+    "ts-node-dev": "^1.0.0-pre.26",
+    "typedoc": "^0.11.1",
+    "typescript": "^3.0.1",
+    "vesper": "^0.1.9"
+  }
+}

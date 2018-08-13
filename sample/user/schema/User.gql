@@ -1,0 +1,12 @@
+type User implements IUser {
+	id: ID
+	email: String
+	name: String
+	role: String
+	createdAt: Date
+	updatedAt: Date
+}
+
+type Mutation {
+	userCreate(email: String!, password: String!): User!
+}
