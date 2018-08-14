@@ -8,7 +8,7 @@ export * from "./AuthController";
 export * from "./service/AuthService";
 export * from "./base/User";
 
-export function jwtAuthorizationCheck(roles: string[], action: Action) {
+export function jwtAuthorizationCheck(roles: string[], action: Action): void {
 	if (action.request === undefined) {
 		throw new Error("Request must be provided");
 	}
