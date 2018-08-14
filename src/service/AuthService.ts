@@ -4,6 +4,8 @@ import { IUserRepository } from "../base/IUserRepository";
 import { AuthModule } from "..";
 import { IUser } from "../base/IUser";
 import { IJWTPayload } from "../base/IJWTPayload";
+import { Token } from "../model/Token";
+import { EntityManager, DeleteResult } from "typeorm";
 
 export interface IAuthResult {
 	accessToken: string;
@@ -18,11 +20,12 @@ export class AuthService {
 
 	constructor(
 		private salt: string = Container.get<string>("salt"),
-		private config = AuthModule.config
+		private config = AuthModule.config,
+		private entityManager: EntityManager
 	) {}
 
 	/**
-	 *Sign In
+	 * Sign In
 	 *
 	 * @param {string} email
 	 * @param {string} password
@@ -66,19 +69,15 @@ export class AuthService {
 			id: userId
 		});
 
-		let storedTokenIndex: number = -1;
-		let storedToken: { agent: string; token: string; created: string } | null = null;
-
-		if (Array.isArray(user.tokens)) {
-			user.tokens.forEach((item, index) => {
-				if (item.agent === userAgent && item.token === token) {
-					storedToken = item;
-					storedTokenIndex = index;
-				}
-			});
-		}
+		const storedToken = await this.entityManager.findOne(Token, {
+			where: {
+				userId,
+				token,
+				client: userAgent
+			}
+		});
 		if (storedToken === null) {
-			throw new Error("Bad token");
+			throw new Error("Bad refresh token");
 		}
 
 		const refreshToken = jwt.sign({ id: user.id }, this.salt, {
@@ -88,14 +87,7 @@ export class AuthService {
 			expiresIn: this.config.accessToken.expiresIn
 		});
 
-		if (Array.isArray(user.tokens)) {
-			user.tokens[storedTokenIndex] = {
-				agent: userAgent,
-				token: refreshToken,
-				created: new Date().toString()
-			};
-			await this.userRepository.save(user);
-		}
+		await this.saveToken(user, userAgent, refreshToken);
 
 		return {
 			accessToken,
@@ -110,32 +102,40 @@ export class AuthService {
 	 * @param {IUser} user
 	 * @param {string} userAgent
 	 * @param {string} refreshToken
-	 * @returns {Promise<IUser>}
+	 * @returns {Promise<Token>}
 	 * @memberof AuthService
 	 */
-	async saveToken(user: IUser, userAgent: string, refreshToken: string): Promise<IUser> {
-		const newTokenItem = {
-			agent: userAgent,
-			token: refreshToken,
-			created: new Date().toString()
-		};
-		if (!Array.isArray(user.tokens)) {
-			user.tokens = new Array();
-			user.tokens.push(newTokenItem);
+	async saveToken(user: IUser, userAgent: string, refreshToken: string): Promise<Token> {
+		const tokensCount: number = await this.entityManager.count(Token, {
+			where: { userId: user.id.toString() }
+		});
+		if (tokensCount + 1 >= this.config.refreshToken.maxSavedTokens) {
+			await this.clearAllTokens(user);
 		} else {
-			let storedTokenIndex: number = -1;
-			user.tokens.forEach((item, index) => {
-				if (item.agent === userAgent) {
-					storedTokenIndex = index;
-				}
+			await this.entityManager.delete(Token, {
+				client: userAgent,
+				userId: user.id.toString()
 			});
-			if (storedTokenIndex > -1) {
-				user.tokens[storedTokenIndex] = newTokenItem;
-			} else {
-				user.tokens.push(newTokenItem);
-			}
 		}
 
-		return await this.userRepository.save(user);
+		const newToken = new Token();
+		newToken.client = userAgent;
+		newToken.token = refreshToken;
+		newToken.userId = user.id.toString();
+
+		return await this.entityManager.save(Token, newToken);
+	}
+
+	/**
+	 * Delete all saved refresh tokenss
+	 *
+	 * @param {IUser} user
+	 * @returns {Promise<DeleteResult>}
+	 * @memberof AuthService
+	 */
+	async clearAllTokens(user: IUser): Promise<DeleteResult> {
+		return await this.entityManager.delete(Token, {
+			userId: user.id.toString()
+		});
 	}
 }

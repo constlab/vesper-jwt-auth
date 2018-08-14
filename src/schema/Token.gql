@@ -1,0 +1,14 @@
+type Token {
+	id: ID!
+	client: String!
+	createdAt: String!
+}
+
+type Query {
+	tokens(userId: ID!): [Token!]
+}
+
+type Mutation {
+	tokenDelete(id: ID!): Boolean
+	tokensDelete(ids: [ID!]!): Int
+}

@@ -6,7 +6,6 @@ export interface IUser {
 	email: string;
 	password: string;
 	role: string;
-	tokens: string | Array<{ agent: string; token: string; created: string }>;
 	jwtPayload: IJWTPayload | string;
 
 	createdAt?: Date;

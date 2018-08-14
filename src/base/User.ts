@@ -34,9 +34,6 @@ export abstract class User implements IUser {
 	@Column({ default: "user", length: 50 })
 	role!: string;
 
-	@Column({ type: "text", nullable: true })
-	tokens!: string | Array<{ agent: string; token: string; created: string }>;
-
 	get jwtPayload(): IJWTPayload {
 		return {
 			id: this.id,
