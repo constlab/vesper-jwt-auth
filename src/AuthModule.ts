@@ -1,6 +1,7 @@
 import { GraphModule } from "vesper";
 import { AuthController } from "./AuthController";
 import { Token } from "./model/Token";
+import { TokenController } from "./TokenController";
 
 interface IAuthConfig {
 	refreshToken: {
@@ -19,6 +20,6 @@ export class AuthModule implements GraphModule {
 	};
 
 	schemas = [__dirname + "/schema/*.gql"];
-	controllers = [AuthController];
+	controllers = [AuthController, TokenController];
 	entities = [Token];
 }

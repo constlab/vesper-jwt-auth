@@ -2,13 +2,14 @@ import * as jwt from "jsonwebtoken";
 import Container from "typedi";
 import { Action } from "vesper";
 import { IJWTPayload } from "./base/IJWTPayload";
+import { IUserRepository } from "./base/IUserRepository";
 
 export * from "./AuthModule";
 export * from "./AuthController";
 export * from "./service/AuthService";
 export * from "./base/User";
 
-export function jwtAuthorizationCheck(roles: string[], action: Action): void {
+export async function jwtAuthorizationCheck(roles: string[], action: Action): Promise<void> {
 	if (action.request === undefined) {
 		throw new Error("Request must be provided");
 	}
@@ -18,7 +19,12 @@ export function jwtAuthorizationCheck(roles: string[], action: Action): void {
 	}
 
 	const payload: IJWTPayload | any = jwt.verify(token, Container.get("salt"));
+
 	if (roles.length && !roles.includes(payload["role"])) {
 		throw new Error("Access denied");
 	}
+
+	const repository = action.container.get<IUserRepository>("user.repository");
+	const user = await repository.findOneOrFail(payload.id || String(payload));
+	action.container.set("user.current", user);
 }

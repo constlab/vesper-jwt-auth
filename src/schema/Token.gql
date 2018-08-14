@@ -5,7 +5,7 @@ type Token {
 }
 
 type Query {
-	tokens(userId: ID!): [Token!]
+	tokens: [Token!]
 }
 
 type Mutation {
