@@ -9,6 +9,16 @@ export * from "./AuthController";
 export * from "./service/AuthService";
 export * from "./base/User";
 
+/**
+ * JWT Authorization Check
+ * Check for access by role
+ * Set current user to DI
+ *
+ * @export
+ * @param {string[]} roles
+ * @param {Action} action
+ * @returns {Promise<void>}
+ */
 export async function jwtAuthorizationCheck(roles: string[], action: Action): Promise<void> {
 	if (action.request === undefined) {
 		throw new Error("Request must be provided");
