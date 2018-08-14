@@ -55,7 +55,7 @@ export class AuthService {
 	}
 
 	/**
-	 * Get Access Token by Refresh Token
+	 * Get access token by Refresh Token
 	 *
 	 * @param {string} userAgent
 	 * @param {string} token
@@ -97,7 +97,7 @@ export class AuthService {
 	}
 
 	/**
-	 * Save token to user
+	 * Save token to database
 	 *
 	 * @param {IUser} user
 	 * @param {string} userAgent

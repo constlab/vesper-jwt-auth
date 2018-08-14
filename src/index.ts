@@ -10,9 +10,9 @@ export * from "./service/AuthService";
 export * from "./base/User";
 
 /**
- * JWT Authorization Check
- * Check for access by role
- * Set current user to DI
+ * - JWT authorization check
+ * - Check for access by role
+ * - Set current user to DI
  *
  * @export
  * @param {string[]} roles
