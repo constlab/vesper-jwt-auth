@@ -61,5 +61,6 @@ typings/
 .next
 
 docs/
+dist/
 
 sample.sqlite

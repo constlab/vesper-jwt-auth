@@ -1,20 +1,30 @@
 {
-  "name": "vesper-jwt-auth",
+  "name": "@constlab/vesper-jwt-auth",
   "version": "0.0.1",
   "description": "vesper + jwt auth",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "doc": "typedoc --out docs/src/ --readme ./README.md",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
-    "sample": "NODE_ENV=dev ts-node-dev sample/index.ts"
+    "sample": "NODE_ENV=dev ts-node-dev sample/index.ts",
+    "build": "tsc",
+    "test": "echo \"No test specified\" && exit 0"
   },
   "keywords": [
     "vesper",
+    "graphql",
     "jwt",
     "node",
     "typescript"
   ],
-  "author": "Ivan Kalinichenko <kalinichenko@constlab.ru>",
+  "author": {
+    "name": "Ivan Kalinichenko",
+    "email": "kalinichenko@constlab.ru"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/constlab/vesper-jwt-auth.git"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/constlab/vesper-jwt-auth/issues"
