@@ -1,6 +1,6 @@
 {
   "name": "@constlab/vesper-jwt-auth",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "description": "vesper + jwt auth",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -8,7 +8,7 @@
     "doc": "typedoc --out docs/src/ --readme ./README.md",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
     "sample": "NODE_ENV=dev ts-node-dev sample/index.ts",
-    "build": "tsc",
+    "build": "NODE_ENV=prod rm -rf dist/* && tsc && (cd src/ && find . -name '*.gql' | cpio -pdm ../dist/)",
     "test": "echo \"No test specified\" && exit 0"
   },
   "keywords": [
