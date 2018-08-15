@@ -3,7 +3,7 @@ import { AuthController } from "./AuthController";
 import { Token } from "./model/Token";
 import { TokenController } from "./TokenController";
 
-interface IAuthConfig {
+export interface IAuthConfig {
 	refreshToken: {
 		expiresIn: string;
 		maxSavedTokens: number;

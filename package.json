@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "vesper + jwt auth",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "doc": "typedoc --out docs/src/ --readme ./README.md",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
