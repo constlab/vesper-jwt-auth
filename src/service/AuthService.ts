@@ -118,14 +118,14 @@ export class AuthService {
 			savedToken.token = refreshToken;
 
 			return await this.entityManager.save(savedToken);
-		} else {
-			const newToken = new Token();
-			newToken.client = userAgent;
-			newToken.token = refreshToken;
-			newToken.userId = user.id.toString();
-
-			return await this.entityManager.save(Token, newToken);
 		}
+
+		const newToken = new Token();
+		newToken.client = userAgent;
+		newToken.token = refreshToken;
+		newToken.userId = user.id.toString();
+
+		return await this.entityManager.save(Token, newToken);
 	}
 
 	/**
