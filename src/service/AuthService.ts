@@ -106,24 +106,26 @@ export class AuthService {
 	 * @memberof AuthService
 	 */
 	async saveToken(user: IUser, userAgent: string, refreshToken: string): Promise<Token> {
-		const tokensCount: number = await this.entityManager.count(Token, {
-			where: { userId: user.id.toString() }
-		});
-		if (tokensCount + 1 >= this.config.refreshToken.maxSavedTokens) {
-			await this.clearAllTokens(user);
-		} else {
-			await this.entityManager.delete(Token, {
+		await this.checkForMaximum(user);
+
+		const savedToken = await this.entityManager.findOne(Token, {
+			where: {
 				client: userAgent,
 				userId: user.id.toString()
-			});
+			}
+		});
+		if (savedToken !== undefined) {
+			savedToken.token = refreshToken;
+
+			return await this.entityManager.save(savedToken);
+		} else {
+			const newToken = new Token();
+			newToken.client = userAgent;
+			newToken.token = refreshToken;
+			newToken.userId = user.id.toString();
+
+			return await this.entityManager.save(Token, newToken);
 		}
-
-		const newToken = new Token();
-		newToken.client = userAgent;
-		newToken.token = refreshToken;
-		newToken.userId = user.id.toString();
-
-		return await this.entityManager.save(Token, newToken);
 	}
 
 	/**
@@ -137,5 +139,22 @@ export class AuthService {
 		return await this.entityManager.delete(Token, {
 			userId: user.id.toString()
 		});
+	}
+
+	/**
+	 * Check for maximum saved tokens
+	 *
+	 * @protected
+	 * @param {IUser} user
+	 * @returns {Promise<void>}
+	 * @memberof AuthService
+	 */
+	protected async checkForMaximum(user: IUser): Promise<void> {
+		const tokensCount: number = await this.entityManager.count(Token, {
+			where: { userId: user.id.toString() }
+		});
+		if (tokensCount + 1 >= this.config.refreshToken.maxSavedTokens) {
+			await this.clearAllTokens(user);
+		}
 	}
 }
