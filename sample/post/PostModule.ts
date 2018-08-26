@@ -1,6 +1,6 @@
 import { GraphModule } from "vesper";
-import { PostController } from "./PostController";
 import { Post } from "./Post";
+import { PostController } from "./PostController";
 
 export class PostModule implements GraphModule {
 	schemas = [__dirname + "/schema/*.gql"];

@@ -10,7 +10,9 @@
     "sample": "NODE_ENV=dev ts-node-dev sample/index.ts",
     "build": "NODE_ENV=prod rm -rf dist/* && tsc && (cd src/ && find . -name '*.gql' | cpio -pdm ../dist/)",
     "test": "echo \"No test specified\" && exit 0",
-    "clean-publish": "clean-publish"
+    "clean-publish": "clean-publish",
+    "lint:fix": "tslint --fix --project tsconfig.json",
+    "lint": "tslint --project tsconfig.json --config tslint.json -t verbose"
   },
   "keywords": [
     "vesper",
@@ -45,7 +47,8 @@
     "conventional-changelog-cli": "^2.0.5",
     "sqlite3": "^4.0.2",
     "ts-node-dev": "^1.0.0-pre.26",
-    "typedoc": "^0.11.1",
+    "tslint": "^5.11.0",
+    "typedoc": "^0.12.0",
     "typescript": "^3.0.1",
     "vesper": "^0.1.9"
   }

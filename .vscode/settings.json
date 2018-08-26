@@ -1,5 +1,7 @@
 {
-  "prettier.printWidth": 100,
   "typescript.tsdk": "node_modules/typescript/lib",
-  "typescript.format.insertSpaceAfterConstructor": true
+  "typescript.format.insertSpaceAfterConstructor": true,
+  "prettier.printWidth": 100,
+  "prettier.trailingComma": "all",
+  "prettier.arrowParens": "always"
 }

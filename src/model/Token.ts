@@ -1,22 +1,22 @@
-import { Entity, PrimaryColumn, Generated, Column, CreateDateColumn, Unique, Index } from "typeorm";
+import { Column, CreateDateColumn, Entity, Generated, Index, PrimaryColumn, Unique } from "typeorm";
 
 @Entity()
 @Unique(["client", "token"])
 export class Token {
 	@PrimaryColumn()
 	@Generated("uuid")
-	id!: string;
+	id?: string;
 
 	@Column({ comment: "user agent or other client id" })
-	client!: string;
+	client?: string;
 
 	@Column({ comment: "refresh token" })
-	token!: string;
+	token?: string;
 
 	@CreateDateColumn()
-	createdAt!: Date;
+	createdAt?: Date;
 
 	@Column()
 	@Index()
-	userId!: string;
+	userId?: string;
 }

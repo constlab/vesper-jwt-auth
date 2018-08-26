@@ -1,6 +1,6 @@
-import { Controller, Query, Authorized, Mutation } from "vesper";
-import { EntityManager } from "typeorm";
 import { Inject } from "typedi";
+import { EntityManager } from "typeorm";
+import { Authorized, Controller, Mutation, Query } from "vesper";
 import { IUser } from "./base/IUser";
 import { Token } from "./model/Token";
 
@@ -29,7 +29,7 @@ export class TokenController {
 
 		return await this.entityManager.delete(Token, {
 			id,
-			userId: this.user.id.toString()
+			userId: this.user.id.toString(),
 		});
 	}
 

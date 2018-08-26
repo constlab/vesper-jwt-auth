@@ -1,6 +1,6 @@
 import { GraphModule } from "vesper";
-import { UserController } from "./UserController";
 import { User } from "./User";
+import { UserController } from "./UserController";
 
 export class UserModule implements GraphModule {
 	schemas = [__dirname + "/schema/*.gql"];

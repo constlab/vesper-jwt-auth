@@ -1,7 +1,7 @@
+import { validate } from "class-validator";
+import { EntityManager } from "typeorm";
 import { Controller, Mutation } from "vesper";
 import { User } from "./User";
-import { EntityManager } from "typeorm";
-import { validate } from "class-validator";
 
 @Controller()
 export class UserController {

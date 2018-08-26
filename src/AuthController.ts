@@ -1,7 +1,7 @@
-import { Controller, CurrentRequest, Mutation, ArgsValidator } from "vesper";
-import { Inject } from "typedi";
-import { AuthService, IAuthResult } from "./service/AuthService";
 import { Request } from "express";
+import { Inject } from "typedi";
+import { Controller, CurrentRequest, Mutation } from "vesper";
+import { AuthService, IAuthResult } from "./service/AuthService";
 
 @Controller()
 export class AuthController {
@@ -9,12 +9,12 @@ export class AuthController {
 	private auth!: AuthService;
 	private userAgent: string = "";
 
-	constructor(@Inject(type => CurrentRequest) private request: Request) {
+	constructor(@Inject(() => CurrentRequest) private request: Request) {
 		this.userAgent = (this.request.headers["user-agent"] as string) || "unknown user agent";
 	}
 
 	@Mutation({ name: "authLogin" })
-	//@ArgsValidator(LoginArgsValidator)
+	// @ArgsValidator(LoginArgsValidator)
 	async login({ email, password }: { email: string; password: string }): Promise<IAuthResult> {
 		return this.auth.sign(email, password, this.userAgent);
 	}

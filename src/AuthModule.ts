@@ -15,8 +15,8 @@ export interface IAuthConfig {
 
 export class AuthModule implements GraphModule {
 	static config: IAuthConfig = {
+		accessToken: { expiresIn: "30m" },
 		refreshToken: { expiresIn: "60d", maxSavedTokens: 10 },
-		accessToken: { expiresIn: "30m" }
 	};
 
 	schemas = [__dirname + "/schema/*.gql"];

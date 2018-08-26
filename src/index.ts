@@ -8,6 +8,9 @@ export * from "./AuthModule";
 export * from "./AuthController";
 export * from "./service/AuthService";
 export * from "./base/User";
+export * from "./base/IJWTPayload";
+export * from "./base/IUser";
+export * from "./base/IUserRepository";
 
 /**
  * - JWT authorization check
@@ -23,14 +26,14 @@ export async function jwtAuthorizationCheck(roles: string[], action: Action): Pr
 	if (action.request === undefined) {
 		throw new Error("Request must be provided");
 	}
-	const token: string = (action.request.headers["token"] as string) || "";
+	const token: string = (action.request.headers.token as string) || "";
 	if (token === "") {
 		throw new Error("The token not provided");
 	}
 
 	const payload: IJWTPayload | any = jwt.verify(token, Container.get("salt"));
 
-	if (roles.length && !roles.includes(payload["role"])) {
+	if (roles.length && !roles.includes(payload.role)) {
 		throw new Error("Access denied");
 	}
 

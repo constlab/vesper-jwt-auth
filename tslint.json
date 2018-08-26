@@ -1,0 +1,15 @@
+{
+  "defaultSeverity": "error",
+  "extends": ["tslint:recommended"],
+  "jsRules": {
+    "indent": [true, "tabs", 2],
+    "max-line-length": [true, 180]
+  },
+  "rules": {
+    "indent": [true, "tabs", 2],
+    "member-access": [true, "no-public"],
+    "max-line-length": [true, 180],
+    "jsdoc-format": false
+  },
+  "rulesDirectory": []
+}

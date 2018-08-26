@@ -1,17 +1,24 @@
 import * as bcrypt from "bcryptjs";
-import { IUser } from "./IUser";
+import { IsDefined, IsEmail } from "class-validator";
 import {
-	PrimaryColumn,
-	Generated,
+	BeforeInsert,
 	Column,
 	CreateDateColumn,
+	Generated,
+	PrimaryColumn,
 	UpdateDateColumn,
-	BeforeInsert
 } from "typeorm";
-import { IsEmail, IsDefined } from "class-validator";
 import { IJWTPayload } from "./IJWTPayload";
+import { IUser } from "./IUser";
 
 export abstract class User implements IUser {
+	get jwtPayload(): IJWTPayload {
+		return {
+			id: this.id,
+			role: this.role,
+		};
+	}
+
 	@PrimaryColumn()
 	@Generated("uuid")
 	id!: string;
@@ -24,28 +31,22 @@ export abstract class User implements IUser {
 	@Column({ nullable: true })
 	name!: string;
 
+	@Column({ default: "user", length: 50 })
+	role!: string;
+
+	@CreateDateColumn()
+	createdAt?: Date;
+
+	@UpdateDateColumn()
+	updatedAt!: Date;
+
 	@Column({ name: "password" })
+	// tslint:disable-next-line:variable-name
 	protected _password!: string;
 
 	set password(password: string) {
 		this._password = bcrypt.hashSync(password.trim(), bcrypt.genSaltSync(10));
 	}
-
-	@Column({ default: "user", length: 50 })
-	role!: string;
-
-	get jwtPayload(): IJWTPayload {
-		return {
-			id: this.id,
-			role: this.role
-		};
-	}
-
-	@CreateDateColumn()
-	createdAt!: Date;
-
-	@UpdateDateColumn()
-	updatedAt!: Date;
 
 	@BeforeInsert()
 	updateName(): void {

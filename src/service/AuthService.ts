@@ -1,11 +1,11 @@
 import * as jwt from "jsonwebtoken";
-import Container, { Service, Inject } from "typedi";
-import { IUserRepository } from "../base/IUserRepository";
+import Container, { Inject, Service } from "typedi";
+import { DeleteResult, EntityManager } from "typeorm";
 import { AuthModule } from "..";
-import { IUser } from "../base/IUser";
 import { IJWTPayload } from "../base/IJWTPayload";
+import { IUser } from "../base/IUser";
+import { IUserRepository } from "../base/IUserRepository";
 import { Token } from "../model/Token";
-import { EntityManager, DeleteResult } from "typeorm";
 
 export interface IAuthResult {
 	accessToken: string;
@@ -21,7 +21,7 @@ export class AuthService {
 	constructor(
 		private salt: string = Container.get<string>("salt"),
 		private config = AuthModule.config,
-		private entityManager: EntityManager
+		private entityManager: EntityManager,
 	) {}
 
 	/**
@@ -39,10 +39,10 @@ export class AuthService {
 			throw new Error("Wrong password");
 		}
 		const refreshToken = jwt.sign({ id: user.id }, this.salt, {
-			expiresIn: this.config.refreshToken.expiresIn
+			expiresIn: this.config.refreshToken.expiresIn,
 		});
 		const accessToken = jwt.sign(user.jwtPayload, this.salt, {
-			expiresIn: this.config.accessToken.expiresIn
+			expiresIn: this.config.accessToken.expiresIn,
 		});
 
 		await this.saveToken(user, userAgent, refreshToken);
@@ -50,7 +50,7 @@ export class AuthService {
 		return {
 			accessToken,
 			refreshToken,
-			user
+			user,
 		};
 	}
 
@@ -66,25 +66,25 @@ export class AuthService {
 		const payload: IJWTPayload | string | any = await jwt.verify(token, this.salt);
 		const userId = typeof payload === "string" ? payload : payload.id;
 		const user = await this.userRepository.findOneOrFail({
-			id: userId
+			id: userId,
 		});
 
 		const storedToken = await this.entityManager.findOne(Token, {
 			where: {
-				userId,
+				client: userAgent,
 				token,
-				client: userAgent
-			}
+				userId,
+			},
 		});
 		if (storedToken === null) {
 			throw new Error("Bad refresh token");
 		}
 
 		const refreshToken = jwt.sign({ id: user.id }, this.salt, {
-			expiresIn: this.config.refreshToken.expiresIn
+			expiresIn: this.config.refreshToken.expiresIn,
 		});
 		const accessToken = jwt.sign({ id: user.id, name: user.name, role: user.role }, this.salt, {
-			expiresIn: this.config.accessToken.expiresIn
+			expiresIn: this.config.accessToken.expiresIn,
 		});
 
 		await this.saveToken(user, userAgent, refreshToken);
@@ -92,7 +92,7 @@ export class AuthService {
 		return {
 			accessToken,
 			refreshToken,
-			user
+			user,
 		};
 	}
 
@@ -111,8 +111,8 @@ export class AuthService {
 		const savedToken = await this.entityManager.findOne(Token, {
 			where: {
 				client: userAgent,
-				userId: user.id.toString()
-			}
+				userId: user.id.toString(),
+			},
 		});
 		if (savedToken !== undefined) {
 			savedToken.token = refreshToken;
@@ -137,7 +137,7 @@ export class AuthService {
 	 */
 	async clearAllTokens(user: IUser): Promise<DeleteResult> {
 		return await this.entityManager.delete(Token, {
-			userId: user.id.toString()
+			userId: user.id.toString(),
 		});
 	}
 
@@ -151,7 +151,7 @@ export class AuthService {
 	 */
 	protected async checkForMaximum(user: IUser): Promise<void> {
 		const tokensCount: number = await this.entityManager.count(Token, {
-			where: { userId: user.id.toString() }
+			where: { userId: user.id.toString() },
 		});
 		if (tokensCount + 1 >= this.config.refreshToken.maxSavedTokens) {
 			await this.clearAllTokens(user);

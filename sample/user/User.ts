@@ -6,8 +6,8 @@ import { IJWTPayload } from "../../src/base/IJWTPayload";
 export class User extends BaseUser {
 	get jwtPayload(): IJWTPayload {
 		return {
+			email: this.email,
 			id: this.id,
-			email: this.email
 		};
 	}
 }
