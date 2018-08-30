@@ -26,7 +26,10 @@ export async function jwtAuthorizationCheck(roles: string[], action: Action): Pr
 	if (action.request === undefined) {
 		throw new Error("Request must be provided");
 	}
-	const token: string = (action.request.headers.token as string) || "";
+	const token: string = ((action.request.headers.authorization as string) || "")
+		.replace("Bearer", "")
+		.trim();
+
 	if (token === "") {
 		throw new Error("The token not provided");
 	}
