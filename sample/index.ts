@@ -15,7 +15,7 @@ bootstrap({
 	port: 3000,
 	// tslint:disable-next-line:object-literal-sort-keys
 	authorizationChecker: (roles: string[], action) => jwtAuthorizationCheck(roles, action),
-	setupContainer: async (container, action) => {
+	setupContainer: async (container) => {
 		container.set("user.repository", getRepository(User));
 	},
 })
