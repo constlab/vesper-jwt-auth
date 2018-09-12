@@ -39,5 +39,8 @@ export class TokenController {
 		if (this.user === null) {
 			throw new Error("Current user must be provided");
 		}
+
+		// tslint:disable-next-line:no-console
+		console.log(ids); // @ToDo should to implement
 	}
 }
